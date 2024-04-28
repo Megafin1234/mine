@@ -188,33 +188,93 @@ void read_execute_userinput ()
 	}
 	else
 	{
-		printf("Invalid command\n");
+		printf("다시 입력해 주세요.\n");
 	}
+}
+
+void save_ranking(char * filename,char *nickname, int turn)
+{
+    FILE *fp;
+    fp = fopen(filename, "a"); // 랭킹을 기록할 파일 열기 (append 모드)
+    if (fp == NULL)
+    {
+        printf("파일 정보를 가져올 수 없습니다.\n");
+        exit(EXIT_FAILURE);
+    }
+    fprintf(fp, "%s %d\n", nickname, turn); // 닉네임과 턴 수를 파일에 기록
+    fclose(fp);
+}
+
+void show_ranking(char *filename)
+{
+    FILE *fp;
+    fp = fopen(filename, "r"); // 랭킹 파일 열기 (읽기 모드)
+    if (fp == NULL)
+    {
+        printf("불러올 랭킹정보가 없습니다.\n");
+        return;
+    }
+
+    // 각 랭킹 항목을 읽어와서 출력
+    char nickname[100];
+    int turn;
+    printf("Ranking:\n");
+    while (fscanf(fp, "%s %d", nickname, &turn) != EOF)
+    {
+        printf("%s - %d turns\n", nickname, turn);
+    }
+
+    fclose(fp);
 }
 
 int main (int argc, char ** argv)
 {
-	if (argc != 2) {
+	if (argc != 3) {
 		fprintf(stderr, "Invalid command: give a filename of board arrangement.\n") ;
 		return EXIT_FAILURE ;
 	}
 
 	load_board(argv[1]) ;
 
-	while (!is_terminated()) {
-		draw_board() ;
-		read_execute_userinput() ;
-	}
-	if (is_terminated() == 0)
-	{
-		printf("You win!\n");
-	}
-	else if (is_terminated() == 1)
-	{
-		printf("Game over\n");
-		draw_board();
-	}
-	printf("게임 플레이에 걸린 턴 수: %d",turn);
+
+    printf("1. 지뢰찾기 플레이\n");
+    printf("2. 랭킹 보기\n");
+    printf("1이나 2를 입력하세요: ");
+
+    int choice;
+    scanf("%d", &choice);
+
+    switch (choice)
+    {
+    case 1:
+        // Minesweeper 게임 플레이
+        while (!is_terminated())
+        {
+            draw_board();
+            read_execute_userinput();
+        }
+        if (is_terminated() == 0)
+        {
+            printf("You win!\n");
+			printf("게임 플레이에 걸린 턴 수: %d",turn);
+            printf("Enter your nickname: ");
+            char nickname[100];
+            scanf("%s", nickname);
+            save_ranking(argv[2],nickname, turn); // 클리어한 경우 랭킹에 저장
+        }
+        else if (is_terminated() == 1)
+        {
+            printf("Game over\n");
+            draw_board();
+        }
+        break;
+    case 2:
+        // 랭킹 표시
+        show_ranking(argv[2]);
+        break;
+    default:
+        printf("Invalid choice\n");
+    }
 
 	return EXIT_SUCCESS ;
 }
