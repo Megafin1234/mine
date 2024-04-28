@@ -100,10 +100,6 @@ void draw_board ()
 				{
 					printf("* ");
 				}
-				else if(board[row][col].num==0)
-				{
-						printf(" ");
-				}
 				else
 				{
 					printf("%d ", board[row][col].num) ;
