@@ -102,7 +102,7 @@ void draw_board ()
 				}
 				else if(board[row][col].num==0)
 				{
-						printf("* ");
+						printf(" ");
 				}
 				else
 				{
