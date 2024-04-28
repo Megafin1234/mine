@@ -109,32 +109,59 @@ void draw_board ()
 	}
 }
 
-//셀 열기
+
 void open_mine(int row, int col)
 {
-	//미리 해당 셀 검사	
-	if (row >= M || row < 0 || col >= N || col < 0 || board[row][col].state == open)
-	{
-		return;
-	}
+    // 범위를 벗어나거나 이미 열린 셀인 경우 종료
+    if (row < 0 || row >= M || col < 0 || col >= N || board[row][col].state == open)
+    {
+        return;
+    }
 
-	board[row][col].state = open;
+    // 셀을 열기
+    board[row][col].state = open;
 
-	if (board[row][col].num == 0 && !board[row][col].mined)
-	{
-		for (int dr = -1; dr <= 1; dr++)
-		{
-			for (int dc = -1; dc <= 1; dc++)
-			{
-				if (dr == 0 && dc == 0)
-				{
-					continue;
-				}
-				open_mine(row + dr, col + dc);
-			}
-		}
-	}
+    // 만약 해당 셀이 지뢰가 아닌 경우 주변에 지뢰가 있는지 확인하고 지뢰의 개수를 표시
+    if (!board[row][col].mined)
+    {
+        // 인접한 8칸을 탐색하여 지뢰의 개수 확인
+        int minesCount = 0;
+        for (int dr = -1; dr <= 1; dr++)
+        {
+            for (int dc = -1; dc <= 1; dc++)
+            {
+                int newRow = row + dr;
+                int newCol = col + dc;
+                if (newRow >= 0 && newRow < M && newCol >= 0 && newCol < N && board[newRow][newCol].mined)
+                {
+                    minesCount++;
+                }
+            }
+        }
+        // 인접한 위치에 지뢰가 있으면 해당 셀에 지뢰의 개수 표시
+        if (minesCount > 0)
+        {
+            board[row][col].num = minesCount;
+        }
+        else
+        {
+            // 주변에 지뢰가 없는 경우 BFS로 인접한 셀 열기
+            for (int dr = -1; dr <= 1; dr++)
+            {
+                for (int dc = -1; dc <= 1; dc++)
+                {
+                    int newRow = row + dr;
+                    int newCol = col + dc;
+                    if (newRow >= 0 && newRow < M && newCol >= 0 && newCol < N && board[newRow][newCol].state != open)
+                    {
+                        open_mine(newRow, newCol);
+                    }
+                }
+            }
+        }
+    }
 }
+
 
 void read_execute_userinput ()
 {	
@@ -182,6 +209,7 @@ int main (int argc, char ** argv)
 	else if (is_terminated() == 1)
 	{
 		printf("Game over\n");
+		draw_board();
 	}
 
 	return EXIT_SUCCESS ;
