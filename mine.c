@@ -17,6 +17,7 @@ typedef struct {
 
 
 int M, N, K ;
+int turn= 0;
 cell_t board[16][16] = {{ {0, 0, 0} }} ;
 
 void load_board(char *filename) {
@@ -121,6 +122,8 @@ void open_mine(int row, int col)
     // 셀을 열기
     board[row][col].state = open;
 
+	turn ++;
+
     // 만약 해당 셀이 지뢰가 아닌 경우 주변에 지뢰가 있는지 확인하고 지뢰의 개수를 표시
     if (!board[row][col].mined)
     {
@@ -211,6 +214,7 @@ int main (int argc, char ** argv)
 		printf("Game over\n");
 		draw_board();
 	}
+	printf("게임 플레이에 걸린 턴 수: %d",turn);
 
 	return EXIT_SUCCESS ;
 }
