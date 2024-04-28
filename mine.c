@@ -248,6 +248,10 @@ int main (int argc, char ** argv)
     {
     case 1:
         // Minesweeper 게임 플레이
+		printf(" open으로 지뢰가 없는 칸을 열 수 있습니다. 지뢰를 밟지 않고 모든 지뢰 위치를 찾아보세요! open을 하게되면 인접해있는 지뢰의 수가 셀에 표시됩니다.\n");
+		printf("mark를 이용해 지뢰가 있을 만한 곳을 미리 체크할 수 있습니다.unmark를 이용해 체크를 해제할 수도 있죠.");
+		printf("다음은 입력 예시입니다. open 1 1, mark 3 0, unmark 3 0     ");
+		printf("게임을 클리어하면 본인의 플레이를 기록해 남길 수 있습니다! 그럼 건투를 빕니다.");
         while (!is_terminated())
         {
             draw_board();
