@@ -100,6 +100,10 @@ void draw_board ()
 				{
 					printf("* ");
 				}
+				else if(board[row][col].num==0)
+				{
+						printf("* ");
+				}
 				else
 				{
 					printf("%d ", board[row][col].num) ;
@@ -195,7 +199,7 @@ void read_execute_userinput ()
 void save_ranking(char * filename,char *nickname, int turn)
 {
     FILE *fp;
-    fp = fopen(filename, "a"); // 랭킹을 기록할 파일 열기 (append 모드)
+    fp = fopen(filename, "a"); 
     if (fp == NULL)
     {
         printf("파일 정보를 가져올 수 없습니다.\n");
@@ -208,14 +212,12 @@ void save_ranking(char * filename,char *nickname, int turn)
 void show_ranking(char *filename)
 {
     FILE *fp;
-    fp = fopen(filename, "r"); // 랭킹 파일 열기 (읽기 모드)
+    fp = fopen(filename, "r"); 
     if (fp == NULL)
     {
         printf("불러올 랭킹정보가 없습니다.\n");
         return;
     }
-
-    // 각 랭킹 항목을 읽어와서 출력
     char nickname[100];
     int turn;
     printf("Ranking:\n");
