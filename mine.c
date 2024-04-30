@@ -83,6 +83,9 @@ void draw_board ()
     printf("\n");
 
 	for (row = 0 ; row < M ; row++) {
+
+
+        
 		printf("%2d ", row); // 행 번호 출력
 		for (col = 0 ; col < N ; col++)
 		{
